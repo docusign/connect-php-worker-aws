@@ -1,6 +1,6 @@
 # PHP: Connect Worker for AWS
 
-Repository: [connect-php-worker-aws]()
+Repository: [connect-php-worker-aws](https://github.docusignhq.com/chen-ostrovski/connext-php-worker-aws)
 
 ## Introduction
 
