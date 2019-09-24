@@ -30,24 +30,34 @@ SDK libraries for C#, Java, Node.js, Python, Ruby, C++, and Go.
 
 ## Installation
 
-This example requires 
+### Introduction
+First, install the **Lambda listener** on AWS and set up the SQS queue.
 
-Then configure the ds_config.ini config file.
-1. Install the example 
+Then set up this code example to receive and process the messages
+received via the SQS queue.
+
+### Installing the Lambda Listener
+
+Install the example 
    [Connect listener for AWS](https://github.com/docusign/connect-node-listener-aws)
    on AWS.
    At the end of this step, you will have the
-   `Queue URL`, `Queue Region` and `Enqueue url`.
+   `Queue URL`, `Queue Region` and `Enqueue url` that you need for the next step.
 
-2. Download or clone this repository. Then:
+### Installing the worker (this repository)
 
-````
-cd connect-php-worker-aws
-composer install
-````
-3. Using AWS IAM, create an IAM `User` with access to your SQS queue.
+#### Requirements
+* PHP version 7.3.5 or later
 
-4. Configure the **ds_config.ini** file: [ds_config.ini](ds_config.ini)
+1. Download or clone this repository. Then:
+
+   ````
+   cd connect-php-worker-aws
+   composer install
+   ````
+1. Using AWS IAM, create an IAM `User` with access to your SQS queue.
+
+1. Configure the **ds_config.ini** file: [ds_config.ini](ds_config.ini)
     The application uses the OAuth JWT Grant flow.
 
     If consent has not been granted to the application by
@@ -111,8 +121,18 @@ Includes three types of testing:
     * `few` - Submits 5 tests every hour.
     * `many` - Submits many tests every hour.
 
-In order to run the tests you need to split the terminal in two inside Visual Studio Code, In the first terminal run the connect-csharp-worker-aws program. In the second terminal choose the wanted test. You can see above at `Run the examples` part how the files can be run.
+To run the tests, split the terminal in two inside Visual Studio Code. In the first terminal run the connect-csharp-worker-aws program. In the second terminal choose the wanted test. You can see above at `Run the examples` part how the files can be run.
 
+**Note:** make sure your composer conatains:
+````
+    "require-dev": {
+        "phpunit/phpunit": "8.3"
+    }
+````   
+If not, write in the terminal:
+```` 
+composer require --dev phpunit/phpunit ^8.3
+````
 ## Support, Contributions, License
 
 Submit support questions to [StackOverflow](https://stackoverflow.com). Use tag `docusignapi`.
