@@ -48,7 +48,7 @@ class RunTest extends \PHPUnit\Framework\TestCase{
     private static function showStatus(){
         global $successes, $enqueueErrors, $dequeueErrors;
         $rate = (100.0* $successes)/($enqueueErrors + $dequeueErrors + $successes);
-        print(date('Y/m/d H:i:s') ."#### Test statistics: $successes (".round($rate,2)."%) successes, $enqueueErrors enqueue errors, $dequeueErrors dequeue errors.");
+        print(date('Y/m/d H:i:s') ."#### Test statistics: $successes (".round($rate,2)."%) successes, $enqueueErrors enqueue errors, $dequeueErrors dequeue errors.\n");
     }
 
     private static function doTest(){
@@ -66,7 +66,7 @@ class RunTest extends \PHPUnit\Framework\TestCase{
         if(!$foundAll){
             $dequeueErrors += sizeof($testsSent);
         }
-        print("Test: $tests sent, " . ($successes-$successesStart) ." successes, ".sizeof($testsSent)." failures.");
+        print("Test: $tests sent, " . ($successes-$successesStart) ." successes, ".sizeof($testsSent)." failures.\n");
     }
 
     private static function checkResults(){
@@ -172,4 +172,4 @@ class RunTest extends \PHPUnit\Framework\TestCase{
     }
 }
 
-RunTest::test_run("few");
+RunTest::test_run("meny");

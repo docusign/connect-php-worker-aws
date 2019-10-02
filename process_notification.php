@@ -5,12 +5,24 @@
     $current_directory = dirname(__FILE__);
     
     function process($test, $xml){
-        // Send the message to the test mode
-        if($test !== ''){
-            processTest($test);
+        // Guarding against injection attacks
+        // Check the incoming test variable to ensure that it ONLY contains the expected data (empty string "", "/break" or integers string)
+        // matcher equals true when it finds wrong input
+        $pattern = '/[^0-9]/';
+        $matcher = preg_match($pattern, $test);
+        $validInput = $test == "/break" || $test == '' || !$matcher;
+        if($validInput){
+            if($test != ''){
+                // message from test mode
+                processTest($test);
+            }
+        }
+        else{
+            print(date('Y/m/d H:i:s')." Wrong test value: ".$test . "\n");
+            print("test can only be: /break, empty string or integers string");
         }
 
-        // In test mode there is no xml sting, should be checked before trying to parse it
+        // In test mode there is no xml string, should be checked before trying to parse it
         if($xml !== ''){
             // Step 1. parse the xml
             $root = simplexml_load_string($xml);
@@ -42,24 +54,36 @@
 
             // Step 2. Filter the notifications
             $ignore = false;
-            // Check if the envelope was sent from the test mode 
-            // If sent from test mode - ok to continue even if the status not equals to Completed
-            if($orderNumber != 'Test_Mode'){
-                if($status != 'Completed'){
+            // Guarding against injection attacks
+            // Check the incoming orderNumber variable to ensure that it ONLY contains the expected data ("Test_Mode" or integers string)
+            // Envelope might not have Custom field when orderNumber === NULL
+            // matcher equals true when it finds wrong input
+            $matcher = preg_match($pattern, $orderNumber);
+            $validInput = $orderNumber == "Test_Mode" || $orderNumber === NULL || !$matcher;
+            if($validInput){
+                // Check if the envelope was sent from the test mode 
+                // If sent from test mode - ok to continue even if the status not equals to Completed
+                if($orderNumber != 'Test_Mode'){
+                    if($status != 'Completed'){
+                        $ignore = true;
+                        if(ds_config('DEBUG') === 'true'){
+                            print(date('Y/m/d H:i:s')." IGNORED: envelope status is $status\n");
+                        }
+                    }
+                }
+                if($orderNumber === NULL || $orderNumber == ""){
                     $ignore = true;
                     if(ds_config('DEBUG') === 'true'){
-                        print(date('Y/m/d H:i:s')." IGNORED: envelope status is $status\n");
+                        $custom_field = ds_config("ENVELOPE_CUSTOM_FIELD");
+                        print(date('Y/m/d H:i:s')." IGNORED: envelope does not have a $custom_field envelope custom field.\n");
                     }
                 }
             }
-            if($orderNumber === NULL || $orderNumber == ""){
+            else{
                 $ignore = true;
-                if(ds_config('DEBUG') === 'true'){
-                    $custom_field = ds_config("ENVELOPE_CUSTOM_FIELD");
-                    print(date('Y/m/d H:i:s')." IGNORED: envelope does not have a $custom_field envelope custom field.\n");
-                }
+                print(date('Y/m/d H:i:s')." Wrong orderNumber value: ". $orderNumber . "\n");
+                print("orderNumber can only be: Test_Mode or integers string");
             }
-
             // Step 3. (Future) Check that this is not a duplicate notification
             // The queuing system delivers on an "at least once" basis. So there is a
             // chance that we have already processes this notification.
