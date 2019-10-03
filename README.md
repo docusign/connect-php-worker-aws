@@ -1,6 +1,6 @@
 # PHP: Connect Worker for AWS
 
-Repository: [connect-php-worker-aws](https://github.docusignhq.com/chen-ostrovski/connext-php-worker-aws)
+Repository: [connect-php-worker-aws](https://github.com/docusign/connect-php-worker-aws)
 
 ## Introduction
 
@@ -141,4 +141,4 @@ Contributions via Pull Requests are appreciated.
 All contributions must use the MIT License.
 
 This repository uses the MIT license, see the
-[LICENSE](https://github.com/docusign/eg-01-php-jwt/blob/master/LICENSE) file.
+[LICENSE](https://github.com/docusign/connect-php-worker-aws/blob/master/LICENSE) file.
